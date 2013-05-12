@@ -1,0 +1,13 @@
+[
+		"nodemux v%s.",
+		"usage: %s -i|--input type:file -f|--font-dir font-directory -m|--mux-file [mux.json] -v|--version -h|--help" ,
+		"",
+		"OPTIONS:",
+		"",
+		"-i|--input type:file",
+		"\tThere are three types of ``type\", sub[title], vid[eo], or optionally, audio.",
+		"",
+		"-f|---font-dir directory",
+		"\tThis will scan a directory for TrueType(tm) fonts (*.ttf) and include them into the output file.",
+		""
+]

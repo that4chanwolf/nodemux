@@ -1,0 +1,50 @@
+#!/usr/bin/env node
+
+var ap   = require('argparser'),
+    pkg  = require('../package.json'),
+    os   = require('os'),
+    path = require('path'),
+    fs   = require('fs'),
+    args, muxOpts;
+
+args = ap.vals("m", "mux-file", "i", "input", "o", "output").dirs("f", "font-dir").nonvals("v", "version", "h", "help").parse();
+
+if(args.opt("v") || args.opt("version")) { // Exit if we get --version or --help
+	console.log(require('../docs/helpfile-small.json').join(os.EOL), 
+		pkg.version, 
+		path.basename(process.argv[1]),
+		path.basename(process.argv[1]));
+	process.exit(0);
+} else if(args.opt("h") || args.opt("help")) {
+	console.log(require('../docs/helpfile-full.json').join(os.EOL),
+		pkg.version,
+		path.basename(process.argv[1]));
+	process.exit(0);
+}
+
+if(
+	(!ap.opt("i") || !ap.opt("input")) ||
+	(!ap.opt("o") || !ap.opt("output")) ||
+	(!ap.opt("f") || !ap.opt("font-dir"))
+) { // Exit if we are missing some vital things
+	console.error("Missing either input, output, or font directory, which are required. Exiting");
+	process.exit(1);
+}
+
+if( !ap.opt("mux") || !ap.opt("mux-file") ) { // Check and see if there's an mux.json file in the directory, if there is, that will override all argument settings
+	if(fs.existsSync(process.env["PWD"] + "/mux.json")) {
+		encodeOpts = require(process.env["PWD"] + "/mux.json");
+	}
+} else if(ap.opt("m")) {
+	if(fs.existsSync(ap.opt("m"))) {
+		muxOpts = require(ap.opt("m"));
+	}
+} else if(ap.opt("mux-file")) {
+	if(fs.existsSync(ap.opt("mux-file"))) {
+		muxOpts = require(ap.opt("mux-file"));
+	}
+} else {
+	muxOpts = {}
+}
+
+return null;
